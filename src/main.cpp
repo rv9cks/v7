@@ -37,8 +37,7 @@ struct Config {
 
 const char *ssid = STASSID;
 const char *password = STAPSK;
-const char *fname = "/0.txt";
-const char *backup_fn = "/1.txt";
+const char *backup_fn = "/backup.txt";
 const String REDIR = "<html><BODY><head> <meta http-equiv=\"refresh\" content=\"2;URL=/\" /></head></BODY></HTML>";
 
 // Структуры данных оптимизированные для ESP8266
@@ -127,11 +126,8 @@ volatile uint8_t prv_key_register = 0xff;
 volatile bool key_pressed = false;
 volatile int bri = Config::MAXPW;
 volatile uint16_t main_index = 0;
-volatile bool need_update = true;
 volatile bool need_refresh = false;
 uint32_t long_pressed = 0;
-uint32_t lastFileUpdate = 0;
-String writeBuffer;
 
 Ticker keypolling;
 Ticker tick;
@@ -149,10 +145,7 @@ void flip();
 void key_poll();
 uint8_t debounce(uint8_t sample);
 String getContentCached(const String& pth);
-void create_backup();
 void addRecord(const tim& shot, uint16_t num = 999);
-void updateTextFileAsync();
-void batchWriteToFile();
 void printMemoryStats();
 #ifdef BEEP_DC
 void routinebeeper();
@@ -233,7 +226,7 @@ void key_poll() {
                 #ifdef BEEP_DC
                 startbeepdc();
                 #endif
-                
+
                 // Добавляем запись с защитой от переполнения
                 if (mainArray.size() < Config::MAX_RECORDS) {
                     addRecord(t, 999);
@@ -250,7 +243,7 @@ String getContentCached(const String& pth) {
     if (cached.length() > 0) {
         return cached;
     }
-    
+
     File file = LittleFS.open(pth, "r");
     if (file) {
         String content = file.readString();
@@ -264,54 +257,31 @@ String getContentCached(const String& pth) {
     }
 }
 
-void create_backup() {
-    Serial.println(F("Create backup file"));
-    LittleFS.remove("/backup.txt");
-    if (!LittleFS.rename(fname, "/backup.txt")) {
-        Serial.println(F("*** Error rename main file to backup "));
-    }
-}
-
 void addRecord(const tim& shot, uint16_t num) {
     rec newRec;
     newRec.shot = shot;
     newRec.num = num;
-    
+
     mainArray.push(newRec);
     main_index = mainArray.size();
-    need_update = true;
 }
 
-// Асинхронное обновление файла с батчингом
-void updateTextFileAsync() {
-    const uint32_t UPDATE_INTERVAL = 5000; // 5 секунд
-    
-    if (need_update && (millis() - lastFileUpdate > UPDATE_INTERVAL)) {
-        batchWriteToFile();
-        lastFileUpdate = millis();
-    }
-}
+// Генерация файла на лету при запросе
+void handleDownload() {
+    server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    server.sendHeader("Content-Disposition", "attachment; filename=\"data.txt\"");
+    server.sendHeader("Content-Type", "text/plain");
+    server.send(200, "text/plain", "");
 
-void batchWriteToFile() {
-    writeBuffer.reserve(1024);
-    writeBuffer = "";
-    
+    char buffer[64];
     for (uint16_t i = 0; i < mainArray.size(); i++) {
         const rec& record = mainArray[i];
-        writeBuffer += String(record.num) + "\t";
-        writeBuffer += String(record.shot.H) + ":" + String(record.shot.M) + ":" + 
-                      String(record.shot.S) + "," + String(record.shot.SS) + "\r\n";
+        snprintf(buffer, sizeof(buffer), "%u\t%u:%02u:%02u,%02u\r\n",
+                record.num, record.shot.H, record.shot.M, record.shot.S, record.shot.SS);
+        server.sendContent(buffer);
+        yield();
     }
-    
-    File file = LittleFS.open(fname, "w");
-    if (file) {
-        file.print(writeBuffer);
-        file.close();
-        Serial.println(F("Text file updated"));
-        need_update = false;
-    } else {
-        Serial.println(F("ERROR: Failed to update text file"));
-    }
+    server.sendContent("");
 }
 
 // Мониторинг памяти
@@ -444,7 +414,6 @@ void handleReplace() {
         int line = rec_param.toInt();
         if (line >= 0 && line < (int)mainArray.size()) {
             mainArray[line].num = new_number.toInt();
-            need_update = true;
             need_refresh = true;
         }
     }
@@ -461,7 +430,6 @@ void handleRestart() {
     tick.detach();
     t.H = 0; t.M = 0; t.S = 0; t.SS = 0;
     rebootsys = true;
-    need_update = true;
     need_refresh = true;
     #ifdef BEEP_DC
     startbeepdc_inf();
@@ -490,11 +458,10 @@ void handleFSEditProcess() {
             }
         }
     }
-    
+
     if (changed) {
-        need_update = true;
+        need_refresh = true;
     }
-    need_refresh = true;
 }
 
 void handleConfirmTr() {
@@ -503,10 +470,8 @@ void handleConfirmTr() {
         server.send(200, "text/html", REDIR);
         return;
     }
-    create_backup();
     mainArray.clear();
     main_index = 0;
-    need_update = true;
     need_refresh = true;
     server.send(200, "text/html", REDIR);
 }
@@ -564,10 +529,9 @@ void setup() {
     server.on("/recreate", []() { need_refresh = true; });
     server.on("/fseditprocess", handleFSEditProcess);
     server.on("/confirm-tr", handleConfirmTr);
+    server.on("/downfile", handleDownload);
 
-    // Статические файлы (только для утилит и загрузки)
-    server.serveStatic("/downfile", LittleFS, fname);
-    server.serveStatic("/backup.txt", LittleFS, "/backup.txt");
+    // Статические файлы (только для утилит)
     server.serveStatic("/utils.html", LittleFS, "/utils.html");
     server.serveStatic("/confirmtr.html", LittleFS, "/confirmtr.html");
     server.serveStatic("/confirmrestart.html", LittleFS, "/confirmrestart.html");
@@ -581,7 +545,6 @@ void setup() {
         Serial.println(F("An Error has occurred while mounting LittleFS"));
     }
 
-    create_backup();
     tick.attach(0.01, flip); // 10ms интервал для точного времени
     
     pinMode(Config::INTERRUPT_PIN, INPUT_PULLUP);
@@ -611,23 +574,20 @@ void loop() {
 #endif
 
     server.handleClient();
-    
+
     if (need_tick_start) {
         tick.attach(0.01, flip);
         need_tick_start = false;
     }
 
-    // Асинхронное обновление текстового файла
-    updateTextFileAsync();
-    
     // Обрабатываем необходимость обновления страницы
     if (need_refresh) {
         server.send(200, "text/html", REDIR);
         need_refresh = false;
     }
-    
+
     // Мониторинг памяти
     printMemoryStats();
-    
+
     yield(); // Даем время системе
 }

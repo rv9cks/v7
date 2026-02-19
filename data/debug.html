@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>main screen</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="content-style-type" content="text/css" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="-1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+</head>
+
+<body>
+  <script>
+    function Refresh() {
+      window.parent.location = window.parent.location.href;
+    }
+  </script>
+
+  <div style="text-align: center">
+    <table border="1"><tr><td class="td1">0</td><td class="td2"><a href=/edit?rec=0>999 00:00:01,02</a></td></tr><tr><td class="td1">1</td><td class="td2"><a href=/edit?rec=1>999 00:01:43,86</a></td></tr><tr><td class="td1">2</td><td class="td2"><a href=/edit?rec=2>999 00:01:46,20</a></td></tr><tr><td class="td1">3</td><td class="td2"><a href=/edit?rec=3>999 00:01:47,00</a></td></tr><tr><td class="td1">4</td><td class="td2"><a href=/edit?rec=4>999 00:01:47,76</a></td></tr><tr><td class="td1">5</td><td class="td2"><a href=/edit?rec=5>999 00:01:48,38</a></td></tr></table><br><br><br><a  href="/utils.html">restart</a><br>Ct=00:00:00,00<br>ESP.getFreeHeap()= 36872</div>
+
+<button class="button-on" type="button" onClick="Refresh()">
+    <label> Refresh </label>
+</button>
+
+<br>
+<a href="/recreate">
+<button class="button-on" type="button" >
+    <label style="color: crimson;"> recreate index </label>
+</button>
+</a>
+<br>
+<a href="/fsedit.html">
+<button class="button-on" type="button" >
+    <label style="color: rgb(20, 220, 37);"> full screen edit </label>
+</button>
+</a>
+
+
+</body>
+
+</html>

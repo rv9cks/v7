@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>main screen</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="content-style-type" content="text/css" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="-1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    html {
+      font-family: Arial, Helvetica, sans-serif;
+      display: inline-block;
+      text-align: center;
+    }
+
+    body {
+      /*margin: 0;*/
+      padding: 0px;
+      /*width: 50%;*/
+      align-items: center;
+    }
+
+    button {
+      border: none;
+      color: #fefcfb;
+      padding: 15px 32px;
+      text-align: center;
+      font-size: 16px;
+      border-radius: 4px;
+      transition-duration: 0.4s;
+    }
+
+    .button-on {
+      background-color: #034078;
+    }
+
+    .button-on:hover {
+      background-color: #1282a2;
+    }
+    input[type="submit"] {
+      border: none;
+      color: #fefcfb;
+      background-color: #034078;
+      padding: 15px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      width: 100px;
+      margin-right: 10px;
+      border-radius: 4px;
+      transition-duration: 0.4s;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #1282a2;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 50%;
+      padding: 12px 20px;
+      margin: 18px;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input[type="tel"] {
+      width: 15%;
+      height: 2.1rem;
+      font-size: 2rem;
+      border-bottom: 10px;
+      padding: 12px 20px;
+      margin: 18px;
+    }
+
+    table {
+      display: inline-block;
+      width: 75%;
+    }
+
+    .td1 {
+      font-size: 1rem;
+    }
+
+    .td2 {
+      font-size: 2.5rem;
+      width: 100%;
+    }
+
+    .td2:hover {
+      background-color: rgb(124, 235, 235);
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    function Refresh() {
+      window.parent.location = window.parent.location.href;
+    }
+  </script>
+
+  <div style="text-align: center">
+    <form action="/replace" method="GET" autocomplete="off">
+    <table border="1">
+        <tr>
+            <td class="td1">0</td>
+            <td class="td2"> 
+                <input type="tel" maxlength="5" id="number" name="number" value="444" autofocus="autofocus">
+                00:00:01,02</td>
+        </tr>
+        <tr>
+            <td class="td1">1</td>
+            <td class="td2"><a href=/edit?rec=1>999 00:07:41,58</a></td>
+        </tr>
+        <tr>
+            <td class="td1">2</td>
+            <td class="td2"><a href=/edit?rec=2>999 00:07:42,82</a></td>
+        </tr>
+        <tr>
+            <td class="td1">3</td>
+            <td class="td2"><a href=/edit?rec=3>999 00:07:43,38</a></td>
+        </tr>
+    </table>
+    <br>
+    <button type="submit" name="submit" value="1" class="button-on">SUBMIT</button>
+    </form>
+    <br><br><br>
+    <a  href="/utils.html">restart</a>
+    <br>Ct=00:07:43,51<br>ESP.getFreeHeap()= 41184
+</div>
+
+<button class="button-on" type="button" onClick="Refresh()">
+    <label> Refresh </label>
+</button>
+
+<br>
+<a href="/recreate">
+<button class="button-on" type="button" >
+    <label style="color: crimson;"> recreate index </label>
+</button>
+</a>
+
+</body>
+
+</html>

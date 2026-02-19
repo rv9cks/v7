@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кнопки с параметрами URL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .setup-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        
+        .setup-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .setup-section p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .input-container {
+            margin: 15px 0;
+            text-align: left;
+            max-width: 400px;
+            margin: 15px auto;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        
+        .start-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex: 1;
+            overflow: auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .buttons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 10px;
+            padding: 10px;
+        }
+        
+        .btn {
+            padding: 12px 0;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn.moved {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .btn-done {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            grid-column: span 2;
+            padding: 15px 0;
+            font-size: 16px;
+        }
+        
+        .btn-done:hover {
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .empty-message {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .buttons-container {
+                grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+                gap: 8px;
+            }
+            
+            .btn {
+                padding: 10px 0;
+                font-size: 12px;
+            }
+            
+            .btn-done {
+                font-size: 14px;
+                padding: 12px 0;
+            }
+            
+            .section-header {
+                font-size: 1.2rem;
+            }
+            
+            .input-group input {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .buttons-container {
+                grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+                gap: 6px;
+            }
+            
+            .btn {
+                padding: 8px 0;
+                font-size: 11px;
+            }
+            
+            .btn-done {
+                font-size: 13px;
+                padding: 10px 0;
+                grid-column: span 3;
+            }
+            
+            .input-group input {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Секция настройки -->
+        <div class="setup-section" id="setupSection">
+            <h2>Настройка кнопок</h2>
+            <p>Введите параметры для генерации кнопок или используйте URL с параметрами:<br><code>?start=1&end=50&exclude=2,10</code></p>
+            <div class="input-container">
+                <div class="input-group">
+                    <label for="startInput">Начальный номер (start):</label>
+                    <input type="number" id="startInput" value="1" min="1" max="1000">
+                </div>
+                <div class="input-group">
+                    <label for="endInput">Конечный номер (end):</label>
+                    <input type="number" id="endInput" value="50" min="1" max="1000">
+                </div>
+                <div class="input-group">
+                    <label for="excludedInput">Исключенные номера (exclude):</label>
+                    <input type="text" id="excludedInput" placeholder="Например: 2,10,15" autocomplete="off">
+                </div>
+            </div>
+            <button class="start-btn" onclick="startApp()">Начать работу</button>
+        </div>
+        
+        <!-- Основной интерфейс (изначально скрыт) -->
+        <div class="section hidden" id="topSection">
+            <h2 class="section-header">Верхняя часть</h2>
+            <div class="buttons-container" id="topContainer">
+                <!-- Кнопки будут добавлены здесь -->
+            </div>
+        </div>
+        <div class="section hidden" id="bottomSection">
+            <h2 class="section-header">Нижняя часть</h2>
+            <div class="buttons-container" id="bottomContainer">
+                <div class="empty-message" id="emptyMessage">Нажмите на кнопки выше, чтобы они появились здесь</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let scriptActive = true;
+        let selectedNumbers = [];
+        let startNumber = 1;
+        let endNumber = 50;
+        let excludedNumbers = new Set();
+        
+        // Функция для получения параметров из URL
+        function getUrlParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const start = urlParams.get('start');
+            const end = urlParams.get('end');
+            const exclude = urlParams.get('exclude');
+            
+            const params = {};
+            if (start !== null) {
+                const startNum = parseInt(start);
+                if (!isNaN(startNum) && startNum >= 1) {
+                    params.start = startNum;
+                }
+            }
+            if (end !== null) {
+                const endNum = parseInt(end);
+                if (!isNaN(endNum) && endNum >= 1) {
+                    params.end = endNum;
+                }
+            }
+            if (exclude !== null) {
+                params.exclude = exclude;
+            }
+            
+            return params;
+        }
+        
+        // Функция для парсинга исключенных номеров
+        function parseExcludedInput(input) {
+            if (!input || input.trim() === '') {
+                return new Set();
+            }
+            // Удаляем все нецифровые символы, кроме пробелов и запятых
+            const cleaned = input.replace(/[^\d,\s]/g, '');
+            // Разделяем по запятым и пробелам
+            const parts = cleaned.split(/[,;\s]+/).filter(part => part.trim() !== '');
+            // Преобразуем в числа
+            const numbers = parts.map(part => parseInt(part.trim()))
+                .filter(num => !isNaN(num));
+            return new Set(numbers);
+        }
+        
+        // Функция для автоматического запуска при наличии параметров в URL
+        function autoStartIfParamsPresent() {
+            const params = getUrlParameters();
+            
+            if (Object.keys(params).length > 0) {
+                // Устанавливаем значения из URL
+                if (params.start !== undefined) {
+                    startNumber = params.start;
+                    document.getElementById('startInput').value = startNumber;
+                }
+                if (params.end !== undefined) {
+                    endNumber = params.end;
+                    document.getElementById('endInput').value = endNumber;
+                }
+                if (params.exclude !== undefined) {
+                    document.getElementById('excludedInput').value = params.exclude;
+                    excludedNumbers = parseExcludedInput(params.exclude);
+                }
+                
+                // Автоматически запускаем приложение
+                setTimeout(() => {
+                    startApp();
+                }, 500);
+            }
+        }
+        
+        function startApp() {
+            // Получаем значения из полей ввода
+            const startInput = parseInt(document.getElementById('startInput').value);
+            const endInput = parseInt(document.getElementById('endInput').value);
+            const excludedInput = document.getElementById('excludedInput').value;
+            
+            // Валидация
+            if (isNaN(startInput) || isNaN(endInput)) {
+                alert('Пожалуйста, введите корректные числовые значения для start и end.');
+                return;
+            }
+            
+            if (startInput > endInput) {
+                alert('Начальный номер не может быть больше конечного!');
+                return;
+            }
+            
+            if (endInput - startInput + 1 > 1000) {
+                alert('Слишком большой диапазон! Максимум 1000 кнопок.');
+                return;
+            }
+            
+            startNumber = startInput;
+            endNumber = endInput;
+            excludedNumbers = parseExcludedInput(excludedInput);
+            
+            // Скрываем секцию настройки
+            document.getElementById('setupSection').classList.add('hidden');
+            // Показываем основной интерфейс
+            document.getElementById('topSection').classList.remove('hidden');
+            document.getElementById('bottomSection').classList.remove('hidden');
+            
+            // Инициализируем приложение
+            initializeApp();
+        }
+        
+        function initializeApp() {
+            const topContainer = document.getElementById('topContainer');
+            const bottomContainer = document.getElementById('bottomContainer');
+            
+            // Очищаем контейнеры
+            topContainer.innerHTML = '';
+            bottomContainer.innerHTML = '';
+            
+            // Создаем кнопки для указанного диапазона, исключая указанные номера
+            const buttonsToCreate = [];
+            for (let i = startNumber; i <= endNumber; i++) {
+                if (!excludedNumbers.has(i)) {
+                    buttonsToCreate.push(i);
+                }
+            }
+            
+            if (buttonsToCreate.length === 0) {
+                topContainer.innerHTML = '<div class="empty-message">Все кнопки исключены! Нечего отображать.</div>';
+            } else {
+                buttonsToCreate.forEach(i => {
+                    const button = document.createElement('button');
+                    button.className = 'btn';
+                    button.textContent = i;
+                    button.dataset.number = i;
+                    button.addEventListener('click', moveToBottom);
+                    topContainer.appendChild(button);
+                });
+            }
+            
+            // Создаем кнопку "Done"
+            const doneButton = document.createElement('button');
+            doneButton.className = 'btn btn-done';
+            doneButton.textContent = 'DONE';
+            doneButton.addEventListener('click', handleDone);
+            bottomContainer.appendChild(doneButton);
+            
+            // Добавляем сообщение о пустоте
+            const emptyMessage = document.createElement('div');
+            emptyMessage.className = 'empty-message';
+            emptyMessage.id = 'emptyMessage';
+            emptyMessage.textContent = 'Нажмите на кнопки выше, чтобы они появились здесь';
+            bottomContainer.insertBefore(emptyMessage, doneButton);
+            
+            // Сбрасываем состояние
+            scriptActive = true;
+            selectedNumbers = [];
+        }
+        
+        function moveToBottom(event) {
+            if (!scriptActive) return;
+            
+            const clickedButton = event.target;
+            const number = parseInt(clickedButton.dataset.number);
+            
+            // Удаляем кнопку из верхней части
+            clickedButton.remove();
+            
+            // Обновляем сообщение о пустоте в верхней части
+            const topContainer = document.getElementById('topContainer');
+            if (topContainer.children.length === 0) {
+                topContainer.innerHTML = '<div class="empty-message">Все кнопки перемещены вниз</div>';
+            }
+            
+            // Добавляем номер в массив выбранных
+            selectedNumbers.push(number);
+            
+            // Добавляем кнопку в нижнюю часть
+            clickedButton.classList.add('moved');
+            clickedButton.removeEventListener('click', moveToBottom);
+            const doneButton = document.querySelector('.btn-done');
+            document.getElementById('bottomContainer').insertBefore(clickedButton, doneButton);
+            
+            // Скрываем сообщение о пустоте
+            const emptyMessage = document.getElementById('emptyMessage');
+            if (emptyMessage) {
+                emptyMessage.style.display = 'none';
+            }
+        }
+        
+        function handleDone() {
+            if (!scriptActive) return;
+            
+            scriptActive = false;
+            
+            // Формируем строку списка выбранных номеров
+            const selectedList = selectedNumbers.join(',');
+            
+            // Формируем URL для перехода
+            const doneUrl = `done.html?list=${encodeURIComponent(selectedList)}`;
+            
+            // Переходим на следующую страницу
+            window.location.href = doneUrl;
+        }
+        
+        // Обработка Enter в поле ввода
+        document.getElementById('excludedInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startApp();
+            }
+        });
+        
+        // Автоматический запуск при загрузке, если есть параметры в URL
+        document.addEventListener('DOMContentLoaded', function() {
+            autoStartIfParamsPresent();
+        });
+    </script>
+</body>
+</html>
+

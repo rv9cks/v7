@@ -268,6 +268,7 @@ void addRecord(const tim& shot, uint16_t num) {
 
 // Генерация файла на лету при запросе
 void handleDownload() {
+    Serial.println(F("call handleDownload"));
     server.setContentLength(CONTENT_LENGTH_UNKNOWN);
     server.sendHeader("Content-Disposition", "attachment; filename=\"data.txt\"");
     server.sendHeader("Content-Type", "text/plain");
@@ -366,12 +367,12 @@ void handleFSEdit() {
         
         for (uint8_t j = 0; j < CHUNK_SIZE && (i + j) < mainArray.size(); j++) {
             const rec& record = mainArray[i + j];
-            const char* tdClass = (record.num == 999) ? "td3" : "td2";
+            const char* tdClass = (record.num == 999) ? "record-deleted" : "";
             
             snprintf(buffer, sizeof(buffer),
-                "<tr><td class=\"td1\">%u</td><td class=\"%s\">"
-                "<input type=\"tel\" maxlength=\"5\" name=\"nm%u\" value=\"%u\" onfocus=\"this.value='';\">"
-                "%02u:%02u:%02u,%02u</td></tr>",
+                "<tr><td>%u</td><td class=\"%s\">"
+                "<input type=\"tel\" maxlength=\"5\" name=\"nm%u\" value=\"%u\" class=\"edit-input\" onfocus=\"this.value='';\">"
+                "<span class=\"edit-time\">%02u:%02u:%02u,%02u</span></td></tr>",
                 i + j, tdClass, i + j, record.num,
                 record.shot.H, record.shot.M, record.shot.S, record.shot.SS);
             chunk += buffer;
@@ -381,11 +382,11 @@ void handleFSEdit() {
         yield();
     }
     
-    server.sendContent("</table><br>");
-    server.sendContent("<button type=\"submit\" name=\"submit\" value=\"1\" class=\"button-on\">SUBMIT</button>");
-    server.sendContent("<button type=\"submit\" name=\"reset\" value=\"1\" class=\"button-off\">CANCEL</button>");
-    server.sendContent("</form></div></body></html>");
-    server.sendContent("");
+    server.sendContent("</tbody></table>");
+    
+    // Кнопки теперь в root2fs.html
+    server.sendContent(getContentCached("/root2fs.html"));
+    server.sendContent(""); // Завершаем chunked transfer
 }
 
 void handleEdit() {

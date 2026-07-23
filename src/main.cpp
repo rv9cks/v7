@@ -333,9 +333,7 @@ void handleRoot() {
     
     server.sendContent("</tbody></table>");
     
-    server.sendContent("<div class='nav-links'><a href=\"/utils.html\">Utils</a> | ");
-    server.sendContent("<a href=\"/fsedit\">Full Edit</a> | ");
-    server.sendContent("<a href=\"/downfile\" download>Download</a></div>");
+    // Кнопки навигации теперь в root2.html
     
     // Информация о системе
     snprintf(buffer, sizeof(buffer),

@@ -11,17 +11,99 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
   <style type="text/css">
-    .princip{
-        height: 190px ;
-        width:190px ;
-        border:  solid;
+    .results-table {
+        width: 100%;
+        max-width: 800px;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        margin: 20px auto;
     }
-    label{
-        width:190px  !important;
-        border:  solid;
+    .results-table th {
+        background: linear-gradient(135deg, #034078, #1282a2);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+    }
+    .results-table td {
+        padding: 12px 20px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .results-table tr td:first-child {
+        border-radius: 8px 0 0 8px;
+        font-weight: bold;
+        color: #666;
+        background: #f8f9fa;
+        min-width: 60px;
+        text-align: center;
+    }
+    .results-table tr td:last-child {
+        border-radius: 0 8px 8px 0;
+    }
+    .results-table tbody tr {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .results-table tbody tr:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .results-table tbody tr:hover td {
+        background: #f0f8ff;
+    }
+    .record-link {
+        color: #034078;
+        text-decoration: none;
+        font-size: 1.4rem;
+        font-weight: 500;
         display: block;
     }
- </style>
+    .record-link:hover {
+        color: #1282a2;
+    }
+    .record-number {
+        font-size: 1.1rem;
+        color: #1282a2;
+        font-weight: bold;
+    }
+    .section-title {
+        background: linear-gradient(135deg, #034078, #1282a2);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        margin: 20px auto;
+        max-width: 800px;
+        box-shadow: 0 4px 15px rgba(3, 64, 120, 0.3);
+    }
+    .info-bar {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px auto;
+        max-width: 800px;
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .info-bar a {
+        color: #034078;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: all 0.2s;
+    }
+    .info-bar a:hover {
+        background: #034078;
+        color: white;
+    }
+    .nav-links {
+        margin: 20px 0;
+    }
+  </style>
 
 </head>
 
@@ -33,5 +115,15 @@
   </script>
 
   <div style="text-align: center">
-  <table border="1">
+  <div class="section-title">
+    <h2>🏁 Спортивный таймер - Результаты</h2>
+  </div>
+  <table class="results-table">
+    <thead>
+      <tr>
+        <th>№</th>
+        <th>Время</th>
+      </tr>
+    </thead>
+    <tbody>
   

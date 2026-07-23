@@ -1,9 +1,35 @@
 </div>
-<br>
-<a href=/downfile download=fin.txt>DOWNLOAD MAIN FILE</a>
-<br>
-<br>
-<a href="/confirmrestart.html">RESTART TIMER</a>
+<div class="nav-links">
+  <a href="/downfile" download class="btn-download">📥 DOWNLOAD MAIN FILE</a>
+  <a href="/confirmrestart.html" class="btn-restart">🔄 RESTART TIMER</a>
+</div>
+<style>
+  .btn-download, .btn-restart {
+    display: inline-block;
+    padding: 12px 24px;
+    margin: 10px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  }
+  .btn-download {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+  }
+  .btn-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(40, 167, 69, 0.4);
+  }
+  .btn-restart {
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+    color: white;
+  }
+  .btn-restart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(220, 53, 69, 0.4);
+  }
+</style>
 </body>
-
 </html>

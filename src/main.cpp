@@ -320,8 +320,8 @@ void handleRoot() {
             const rec& record = mainArray[i + j];
             
             snprintf(buffer, sizeof(buffer),
-                "<tr><td class=\"td1\">%u</td><td class=\"td2\">"
-                "<a href=/edit?rec=%u>%u %02u:%02u:%02u,%02u</a></td></tr>",
+                "<tr><td class=\"record-number\">%u</td><td>"
+                "<a href=/edit?rec=%u class=\"record-link\">%u %02u:%02u:%02u,%02u</a></td></tr>",
                 i + j, i + j, record.num,
                 record.shot.H, record.shot.M, record.shot.S, record.shot.SS);
             chunk += buffer;
@@ -331,16 +331,19 @@ void handleRoot() {
         yield(); // Даем время другим задачам
     }
     
-    server.sendContent("</table>");
+    server.sendContent("</tbody></table>");
     
-    server.sendContent("<br><br><a href=\"/utils.html\">Utils</a> | ");
+    server.sendContent("<div class='nav-links'><a href=\"/utils.html\">Utils</a> | ");
     server.sendContent("<a href=\"/fsedit\">Full Edit</a> | ");
-    server.sendContent("<a href=\"/downfile\" download>Download</a>");
+    server.sendContent("<a href=\"/downfile\" download>Download</a></div>");
     
     // Информация о системе
     snprintf(buffer, sizeof(buffer),
-        "<br><br>Current time: %02u:%02u:%02u,%02u<br>"
-        "Records: %u | Free heap: %u",
+        "<div class=\"info-bar\">"
+        "<span>⏰ Current time: %02u:%02u:%02u,%02u</span>"
+        "<span>📊 Records: %u</span>"
+        "<span>💾 Free heap: %u</span>"
+        "</div>",
         t.H, t.M, t.S, t.SS,
         mainArray.size(), ESP.getFreeHeap());
     server.sendContent(buffer);

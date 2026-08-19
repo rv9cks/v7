@@ -1,25 +1,56 @@
 </div>
 </div>
 <div class="nav-links">
-  <a href="/utils.html" class="btn">Utils</a>
-  <a href="/fsedit" class="btn">Full Edit</a>
-  <a href="/downfile" download class="btn">Download</a>
-  <a href="/confirmrestart.html" class="btn">Restart</a>
+  <a href="/utils.html" class="btn">🛠 Utils</a>
+  <a href="/fsedit" class="btn">✏️ Full Edit</a>
+  <a href="/downfile" download class="btn">⬇️ Download</a>
+  <a href="/confirmrestart.html" class="btn">🔄 Restart</a>
 </div>
 <style>
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(8px, 2vw, 15px);
+    padding: clamp(15px, 4vw, 25px);
+    background: linear-gradient(135deg, #fafbfc 0%, #f0f4f8 100%);
+    border-top: 1px solid #e8e8e8;
+  }
+  
   .btn {
-    display: inline-block;
-    padding: 12px 24px;
-    margin: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(10px, 3vw, 14px) clamp(16px, 4vw, 24px);
     text-decoration: none;
     font-weight: 600;
-    background: #034078;
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    background: linear-gradient(135deg, #034078 0%, #0a5aa0 100%);
     color: white;
-    border: 1px solid #034078;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(3, 64, 120, 0.3);
+    transition: all 0.3s ease;
+    min-width: clamp(80px, 20vw, 120px);
   }
+  
   .btn:hover {
-    background: #1282a2;
-    border-color: #1282a2;
+    background: linear-gradient(135deg, #1282a2 0%, #0d6a8a 100%);
+    box-shadow: 0 4px 15px rgba(18, 130, 162, 0.4);
+    transform: translateY(-2px);
+  }
+  
+  .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(18, 130, 162, 0.3);
+  }
+  
+  @media (max-width: 480px) {
+    .btn {
+      min-width: clamp(70px, 45vw, 100px);
+      padding: 8px 12px;
+      font-size: 0.8rem;
+    }
   }
 </style>
 </body>

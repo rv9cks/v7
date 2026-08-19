@@ -1,1 +1,32 @@
-(data/root1.html, data/root2.html are source files, not build artifacts or dependencies)
+# Examples 1:
+(empty — output nothing)
+
+# Example 2 (Project with artifacts):
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
+dist/
+build/
+target/
+
+# Dependencies
+.venv/
+venv/
+node_modules/
+.env
+.env.local
+.env.*
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Editors
+.vscode/
+.idea/
+
+# Original rules preserved
+*.log

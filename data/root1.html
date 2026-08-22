@@ -53,8 +53,15 @@
       -webkit-overflow-scrolling: touch;
     }
     
+    .results-table,
+    .results-table table {
+      width: 100% !important;
+      max-width: 100% !important;
+      display: table !important;
+      margin: 0 !important;
+    }
+    
     .results-table {
-      width: 100%;
       border-collapse: collapse;
       margin: 0;
       font-size: clamp(0.9rem, 3vw, 1.5rem);
@@ -63,12 +70,12 @@
     
     .results-table th:first-child,
     .results-table td:first-child {
-      width: 20%;
+      width: 20% !important;
     }
     
     .results-table th:last-child,
     .results-table td:last-child {
-      width: 80%;
+      width: 80% !important;
     }
     
     .results-table thead {

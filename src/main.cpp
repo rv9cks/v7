@@ -320,10 +320,13 @@ void handleRoot() {
         for (uint8_t j = 0; j < CHUNK_SIZE && (i + j) < mainArray.size(); j++) {
             const rec& record = mainArray[i + j];
             
+            // Если num == 999, добавляем красный цвет
+            String numStyle = (record.num == 999) ? " style=\"color: red;\"" : "";
+            
             snprintf(buffer, sizeof(buffer),
-                "<tr><td class=\"record-number\">%u</td><td>"
+                "<tr><td class=\"record-number\"%s>%u</td><td>"
                 "<a href=/edit?rec=%u class=\"record-link\">%u %02u:%02u:%02u,%02u</a></td></tr>",
-                i + j, i + j, record.num,
+                numStyle.c_str(), i + j, i + j, record.num,
                 record.shot.H, record.shot.M, record.shot.S, record.shot.SS);
             chunk += buffer;
         }

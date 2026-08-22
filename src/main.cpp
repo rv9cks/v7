@@ -321,7 +321,8 @@ void handleRoot() {
             const rec& record = mainArray[i + j];
             
             // Если num == 999, добавляем класс td3 (красный цвет) ко времени
-            const char* timeClass = (record.num == 999) ? "td3" : "";
+            const char* timeClass = (record.num == 999) ? "td3" : "td2";
+            Serial.printf("TimeClass = %s\n",timeClass);
             
             snprintf(buffer, sizeof(buffer),
                 "<tr><td class=\"record-number\">%u</td><td class=\"%s\">"

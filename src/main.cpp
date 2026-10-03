@@ -51,6 +51,7 @@ struct tim {
 struct rec {
     uint16_t num = 999;  // Компактнее чем char[8]
     tim shot;
+    boolean sync;
     
     void setNum(const String& numStr) {
         num = numStr.toInt();
@@ -58,6 +59,14 @@ struct rec {
     
     String getNumStr() const {
         return String(num);
+    }
+
+    boolean getSync() {
+        return sync;
+    }
+
+    void setSync(boolean s) {
+        sync = s;
     }
 };
 
@@ -261,6 +270,7 @@ void addRecord(const tim& shot, uint16_t num) {
     rec newRec;
     newRec.shot = shot;
     newRec.num = num;
+    newRec.sync = false;
 
     mainArray.push(newRec);
     main_index = mainArray.size();
